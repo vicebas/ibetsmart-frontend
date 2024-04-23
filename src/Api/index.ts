@@ -2,8 +2,10 @@ import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {LoginData, SignupData} from "../interfaces/User.interface.ts";
 import {Portfolio} from "../interfaces";
 
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL =  import.meta.env.VITE_BASE_URL ?? 'https://backendibet.gamaliel.dev/api';
 //const BASE_URL = 'https://backendibet.gamaliel.dev/api';
+
+console.log(BASE_URL);
 
 const api = axios.create({
     baseURL: BASE_URL,// replace with your API base URL
