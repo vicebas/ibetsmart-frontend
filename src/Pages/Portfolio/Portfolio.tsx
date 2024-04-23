@@ -1,12 +1,12 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Portfolio as PortfolioType} from "../../interfaces/";
 import {Game as GameType, Sport as SportType, Competition as CompetitionType} from "../../interfaces/";
 import api from "../../Api";
 import {useParams} from "react-router-dom";
 import Loading from "../../Components/Loading.tsx";
 import Meta from "antd/es/card/Meta";
-import {Card, Col, Divider, Grid, Row, Statistic} from "antd";
-import {Tag, Table} from "antd";
+import {Card, Col, Divider, Row, Statistic} from "antd";
+import {Tag} from "antd";
 
 import moment from 'moment';
 
@@ -56,14 +56,14 @@ const Portfolio = () => {
     const [loading, setLoading] = useState(true);
     const [games, setGames] = useState<GameType[]>([]);
 
-    const getPortfolio = async () => {
+    const getPortfolio = useCallback(async () => {
         const data = (await api.getPortfolio(id)).data as PortfolioType;
         setPortfolio(data);
-    }
-    const getPortfolioGames = async () => {
+    }, [id])
+    const getPortfolioGames = useCallback(async () => {
         const data = (await api.getPortfolioGames(id)).data as GameType[];
         setGames(data);
-    }
+    },[id])
     useEffect(() => {
         async function fetchData() {
             await getPortfolio();
@@ -72,7 +72,7 @@ const Portfolio = () => {
         }
 
         fetchData();
-    }, []);
+    }, [getPortfolioGames, getPortfolio]);
 
     if (loading) {
         return <Loading/>
@@ -100,7 +100,7 @@ const Portfolio = () => {
             <h2>Games</h2>
             <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
                 {games.map((game, key) => (
-                    <Col span={12}>
+                    <Col key={key} span={12}>
                         <GameCard game={game}/>
                         <Divider/>
                     </Col>

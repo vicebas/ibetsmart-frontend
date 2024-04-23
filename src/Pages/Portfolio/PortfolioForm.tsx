@@ -15,13 +15,10 @@ const PortfolioForm = () => {
         getSports,
         getTeams,
         getCompetitions,
-        getGeolocations,
-        getTeamsPerSport,
-        getCompetitionsPerSport
+        getGeolocations
     } = useContext(CategoryContext)
     const navigate = useNavigate();
 
-    const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
     const [sports, setSports] = useState<Sport[]>([]);
     const [teams, setTeams] = useState<Team[]>([]);
@@ -41,18 +38,10 @@ const PortfolioForm = () => {
             setLoading(false);
         }
         fetchData();
-    }, []);
+    }, [getCompetitions, getGeolocations, getSports, getTeams]);
 
 
-    const handleSportChange = async (evt) => {
-        const sport = sports.find(sport => sport.id === evt.target.value);
-        if (!sport) return;
-        const teams = await getTeamsPerSport(sport.slug, false);
-        const competitions = await getCompetitionsPerSport(sport.slug, false);
-        setTeams(teams)
-        setCompetitions(competitions)
-        form.resetFields(['teams', 'competitions'])
-    }
+
 
     if (loading)
         return <Loading />
@@ -66,7 +55,7 @@ const PortfolioForm = () => {
             name: values.name,
         }
 
-        api.createPortfolio(portfolio).then(r =>  {
+        api.createPortfolio(portfolio).then(() =>  {
             toast("Portfolio created successfully")
             navigate('/portfolios')
         });
@@ -88,7 +77,7 @@ const PortfolioForm = () => {
                 name="sports"
                 rules={[{ required: true, message: 'Please select sports!' }]}
             >
-                <Select mode={"multiple"} onChange={handleSportChange}>
+                <Select mode={"multiple"} >
                     {sports.map(sport => <Select.Option value={sport.id}>{sport.name}</Select.Option>)}
                 </Select>
             </Form.Item>

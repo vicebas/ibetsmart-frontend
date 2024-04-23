@@ -1,8 +1,8 @@
-import {useContext, useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import api from "../../Api";
-import {Portfolio} from "../../interfaces";
+import {Competition, Portfolio, Team, Geolocation} from "../../interfaces";
 import Loading from "../../Components/Loading.tsx";
-import {Card, Col, Divider, Tag, Row} from "antd";
+import {Card, Col, Tag, Row} from "antd";
 import {Link} from "react-router-dom";
 
 const Portfolios = () => {
@@ -32,17 +32,16 @@ const Portfolios = () => {
                     <Col span={8}>
                         <Card size="small" title={portfolio.name} extra={<Link to={`/portfolios/${portfolio.id}`} >More</Link>} style={{ width: 300 }}>
                             <p>{portfolio.sports.length>0 &&
-                                // @ts-ignore
                                 <span> Sports: {portfolio.sports.map((sport) => <Tag>{(sport as Sport).name? (sport as Sport).name: sport}</Tag>)}</span>
                             }</p>
                             <p>{portfolio.teams.length>0 &&
-                               <span> Teams: {portfolio.teams.map((team) => <Tag>{(team as Team).name? (team as Team).name: team}</Tag>)}</span>
+                               <span> Teams: {portfolio.teams.map((team) => <Tag>{(team as Team).name? (team as Team).name: team.toString()}</Tag>)}</span>
                             }</p>
                             <p>{portfolio.competitions.length>0 &&
-                                <span> Competitions: {portfolio.competitions.map((competition) => <Tag>{(competition as Competition).name? (competition as Competition).name: competition}</Tag>)}</span>
+                                <span> Competitions: {portfolio.competitions.map((competition) => <Tag>{(competition as Competition).name? (competition as Competition).name: competition.toString()}</Tag>)}</span>
                             }</p>
                             <p>{portfolio.geolocations.length>0 &&
-                                <span> Geolocations: {portfolio.geolocations.map((geolocation) => <Tag>{(geolocation as Geolocation).name? (geolocation as Geolocation).name: geolocation}</Tag>)}</span>
+                                <span> Geolocations: {portfolio.geolocations.map((geolocation) => <Tag>{(geolocation as Geolocation).name? (geolocation as Geolocation).name: geolocation.toString()}</Tag>)}</span>
                             }</p>
 
                         </Card>
