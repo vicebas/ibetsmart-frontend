@@ -1,6 +1,6 @@
 import React from "react"
 import { FaUserAlt, FaDoorOpen, FaMoneyCheckAlt} from "react-icons/fa";
-import {Menu, MenuProps} from "antd"
+import {Divider, Flex, Menu, MenuProps, Image, Col, Row} from "antd"
 import {FaBuildingCircleCheck} from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
 
@@ -19,7 +19,7 @@ function getItem(
         children,
         label,
         type,
-        style: { color: 'white' },
+        style: { color: '#000040', borderLeft:"0.1em  solid #bbb", boxShadow: "0px 0px 0px 0px"},
     } as MenuItem;
 }
 
@@ -39,13 +39,26 @@ const Navbar: React.FC = () => {
     return (
         <Menu
             onClick={onClick}
-            style={{ width: 256, backgroundColor: 'transparent', color: 'white'}}
+            style={{marginBottom:0,border:0, backgroundColor: 'transparent', color: '#000090'}}
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
-            mode="inline"
+            mode="horizontal"
             items={items}
         />
     );
 };
 
-export default Navbar;
+const Header: React.FC = () => {
+
+  return <Flex vertical>
+            <Row style={{borderBottom:"1px solid #999", boxShadow:"1px 0px 0px 0px"}}>
+                <Col>
+                    <Image src="logo.png" preview={false} alt="logo" height={30}  />
+                </Col>
+            </Row>
+        <Navbar />
+    </Flex>
+}
+
+
+export default Header;

@@ -2,13 +2,14 @@ import {useCallback, useEffect, useState} from "react";
 import {Geolocation, Portfolio as PortfolioType, Team} from "../../interfaces/";
 import {Game as GameType, Sport as SportType, Competition as CompetitionType} from "../../interfaces/";
 import api from "../../Api";
-import {useParams} from "react-router-dom";
+import {useParams, Link} from "react-router-dom";
 import Loading from "../../Components/Loading.tsx";
 import Meta from "antd/es/card/Meta";
-import {Card, Col, Divider, Row, Statistic} from "antd";
+import {Button, Card, Col, Divider, List, Row, Statistic} from "antd";
 import {Tag} from "antd";
 
 import moment from 'moment';
+import {m} from "framer-motion";
 
 const GameCard = ({game}: { game: GameType }) => {
     const sport = (game.sport as SportType).name ? (game.sport as SportType).name : game.sport;
@@ -17,37 +18,13 @@ const GameCard = ({game}: { game: GameType }) => {
     const competition = (game.competition as CompetitionType).name ? (game.competition as CompetitionType).name  : game.competition;
     const geolocation = (game.geolocation as Geolocation).name ? (game.geolocation as Geolocation).name : game.geolocation;
     const body = `${team1} x ${team2}`;
-    const game_statistics = game.game_statistics?.pop()
-    return <><Card title={`${sport}: ${competition}`}>
-        <Meta title={body} description={`${geolocation} - ${moment(game.date).format('MMMM Do YYYY, h:mm:ss a')}`}/>
-        <Divider/>
-        <Row>
-            <Col span={12}>
-            <Card bordered={false}>
-
-                {game_statistics && <Statistic
-                    title={game_statistics["bet_reccomendation"] > 0 ? `Bet Reccomendation: ${team1}` : `Bet Reccomendation: ${team2}`}
-                    value={game_statistics["pcm_game"] * 100}
-                    precision={2}
-                    valueStyle={{color: '#3f8600'}}
-                    suffix="%"
-                />}
-            </Card>
-            </Col><Col span={12}>
-            <Card bordered={false}>
-
-                {game_statistics && <Statistic
-                    title={game_statistics["bet_reccomendation"] > 0 ? `Bet Reccomendation: ${team1}` : `Bet Reccomendation: ${team2}`}
-                    value={game_statistics["pcm_game"] * 100}
-                    precision={2}
-                    valueStyle={{color: '#3f8600'}}
-                    suffix="%"
-                />}
-            </Card>
-        </Col>
-        </Row>
-
-    </Card></>;
+    return (<List.Item>
+            <List.Item.Meta
+                title={
+                    <Link to={`/game/${game.id}`}>{body} - {`${sport}: ${competition}`}</Link>}
+                description={moment(game.date).format('MMMM Do YYYY, h:mm:ss a')}
+            />
+        </List.Item>)
 }
 
 const Portfolio = () => {
@@ -65,7 +42,14 @@ const Portfolio = () => {
         if(!id) return;
 
         const data = (await api.getPortfolioGames(id)).data as GameType[];
-        setGames(data);
+        const sorted = data.sort((g1, g2) => {
+            const g1_stat = g1.game_statistics?.pop();
+            const g2_stat = g2.game_statistics?.pop();
+            if(!g1_stat) return -1;
+            if(!g2_stat) return 1;
+            return g1_stat.pcm_game - g2_stat.pcm_game;
+        });
+        setGames(sorted);
     },[id])
     useEffect(() => {
         async function fetchData() {
@@ -80,10 +64,11 @@ const Portfolio = () => {
     if (loading) {
         return <Loading/>
     }
-
+    console.log(portfolio, games)
     return (
         <div>
             <h1>{portfolio?.name}</h1>
+            <Button>Sign Portfolio</Button>
             {!!portfolio?.sports.length && (
                 <h3>Sports: <Tag>{portfolio?.sports.map(sport => (sport as SportType).name ? (sport as SportType).name : sport).join(", ")}</Tag>
                 </h3>
@@ -101,14 +86,11 @@ const Portfolio = () => {
                 </h3>
             )}
             <h2>Games</h2>
-            <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+            <List gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
                 {games.map((game, key) => (
-                    <Col key={key} span={12}>
                         <GameCard game={game}/>
-                        <Divider/>
-                    </Col>
                 ))}
-            </Row>
+            </List>
         </div>
     )
 }

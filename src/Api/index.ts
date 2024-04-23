@@ -52,9 +52,11 @@ const getPrivateApi = () => {
 }
 const getGames = () => getPrivateApi().get('/games/');
 
+const getGame = (id: string) => getPrivateApi().get(`/games/${id}/`)
+
 const getBookmarkers = () => getPrivateApi().get('/bookmarkers/')
 
-const updateBookmarker = (bookmarkerId :string , active: boolean) => getPrivateApi().post(`/bookmarker/${bookmarkerId}/activate`, {active})
+const updateBookmarker = (bookmarkerId :string , active: boolean) => getPrivateApi().post(`/bookmarkers/${bookmarkerId}/activate`, {active})
 
 const getCurrentUser = () => getPrivateApi().get('/user/');
 
@@ -81,9 +83,14 @@ const getPortfolioGames = (id: string) => getPrivateApi().get(`/portfolio/${id}/
 
 const createPortfolio = (data: Portfolio) => getPrivateApi().post('/portfolio/', data)
 
+const subscribePortfolio = (id: string) => getPrivateApi().post(`/portfolio/${id}/subscribe/`)
 
+const getSubscribed = () => getPrivateApi().get('/portfolio/subscribed/')
 
-export default {login, register, getGames, getBookmarkers,
+const getPortfolioBets = (id: string) => getPrivateApi().get(`/portfolio/${id}/bets`)
+
+export default {login, register, getGames, getBookmarkers, getGame,
                 updateBookmarker, getCurrentUser, getSports,
                  getCompetitions, getTeams, getGeolocations,
-                 getPortfolios, getPortfolio, createPortfolio, getPortfolioGames};
+                 getPortfolios, getPortfolio, createPortfolio,subscribePortfolio,
+                 getSubscribed, getPortfolioGames, getPortfolioBets};

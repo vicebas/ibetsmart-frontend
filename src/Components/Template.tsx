@@ -11,17 +11,13 @@ const borderRadiusLG = '16px';
 const Template = () => {
     return (
         <CategoryProvider>
-        <Layout hasSider>
-            <Sider
-                style={{ overflow: 'auto', color:"white",    height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }}
-            >
-                <Navbar/>
-            </Sider>
-            <Layout style={{marginLeft:200, padding:0, width:'-webkit-max-content', minHeight:"100vh", background: colorBgContainer}}>
-                <Header style={{ padding: 0, background: "#242424", height: 80}} >
-                    <h2 style={{ color: "white", textAlign: "center", padding: "0px 0px", borderRadius: borderRadiusLG }}>IBetSmart</h2>
-                </Header>
-                <Content style={{ margin: '0px 16px 0', overflow: 'initial', color: "#242424", }}>
+        <Layout style={{height:"-webkit-fill-available"}}>
+            <Header  style={{backgroundColor: "#f0f0f0", position: 'sticky', zIndex: 100,
+          top: 0, height:"fit-content", padding:0, borderBottom: "1px solid #666"}}><Navbar/></Header>
+            <Layout style={{ padding:0,margin:0, width:'-webkit-fill-available', minHeight:"-webkit-fill-available", background: colorBgContainer}}>
+
+                <Content style={{ margin: '0px', overflow: 'initial',background:"#ccc",  color: "#242424", }}>
+
                     <Outlet />
                 </Content>
             </Layout>

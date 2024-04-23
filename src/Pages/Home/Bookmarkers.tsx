@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { Bookmarker as BookmarkerType } from '../../interfaces';
 import api from '../../Api';
-import {Container, FormControl, FormLabel, Heading, Skeleton, Stack, Switch} from "@chakra-ui/react";
+import {Col, Row, Switch, Flex, List, Card} from "antd";
+import Loading from "../../Components/Loading.tsx";
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 type BookmarkerProps = {
     bookmarker: BookmarkerType
@@ -9,21 +12,27 @@ type BookmarkerProps = {
 }
 const Bookmarker: React.FC<BookmarkerProps> = ({bookmarker}) => {
     const [isBookmarked, setBookmarked] = useState(bookmarker.active);
-
-    const handleBookmarkerActivate =  (value: string) => {
-        const checked = value === 'true';
-        setBookmarked(checked)
-        api.updateBookmarker(bookmarker.id.toString(), checked );
+    const [loading, setLoading] = useState(false);
+    const handleBookmarkerActivate =  (checked: boolean) => {
+        setLoading(true)
+        api.updateBookmarker(bookmarker.id.toString(), checked )
+            .then(() =>{
+                setLoading(false)
+                setBookmarked(checked)
+            })
+            .catch(() => setLoading(false))    ;
 
     }
     return(
-    <FormControl display='flex' alignItems='center'>
-        <FormLabel htmlFor='email-alerts' mb='0'>
-            {bookmarker.name} - {bookmarker.website}
-        </FormLabel>
-        <Switch id='email-alerts' defaultChecked={isBookmarked} onChange={(evt) => handleBookmarkerActivate(evt.target.value)} />
-    </FormControl>
-    )
+        <List.Item
+
+            extra={[<Switch defaultChecked={isBookmarked} loading={loading} onChange={(checked) => handleBookmarkerActivate(checked)} />]}
+            >
+                  <List.Item.Meta
+            title={bookmarker.name} 
+            description={bookmarker.website}
+        />
+                </List.Item>)
 }
 
 
@@ -42,28 +51,33 @@ const Bookmarkers = () => {
 
     if(loading)
         return (
-            <Stack>
-                <Skeleton height='20px' />
-                <Skeleton height='20px' />
-                <Skeleton height='20px' />
-            </Stack>
+            <Loading />
         )
-    return (
-        <Stack spacing={4}>
-            {bookmarkers.map(bookmarker => <Bookmarker key={bookmarker.id} bookmarker={bookmarker} />)}
-        </Stack>
+     return (
+        <Card>
+        <List  size="small" 
+        >
+            {bookmarkers.sort((a,b) => {
+                if(a.active && !b.active)
+                    return -1;
+                if(!a.active && b.active)
+                    return 1;
+                
+                return  a.name.localeCompare(b.name)
+            }).map(bookmarker => 
+            <Bookmarker key={bookmarker.id} bookmarker={bookmarker} />)}
+        </List>
+        </Card>
     )
 
 }
 
 const BookmarkerPage = () => (
 
-    <Container>
-        <Stack spacing={4}>
-            <Heading>My Bookmarkers</Heading>
-            <Bookmarkers />
-        </Stack>
-    </Container>
+    <Flex vertical style={{width:"100vw", padding:"0px 40px"}}>
+            <Title>My Bookmarkers</Title>
+                    <Bookmarkers />
+    </Flex>
 
     )
 
