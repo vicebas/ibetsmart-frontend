@@ -1,6 +1,6 @@
 import { useEffect, useState} from "react";
 import api from "../../Api";
-import {Competition, Portfolio, Team, Geolocation} from "../../interfaces";
+import {Competition, Portfolio, Team, Geolocation, Sport} from "../../interfaces";
 import Loading from "../../Components/Loading.tsx";
 import {Card, Col, Tag, Row} from "antd";
 import {Link} from "react-router-dom";
@@ -32,7 +32,7 @@ const Portfolios = () => {
                     <Col span={8}>
                         <Card size="small" title={portfolio.name} extra={<Link to={`/portfolios/${portfolio.id}`} >More</Link>} style={{ width: 300 }}>
                             <p>{portfolio.sports.length>0 &&
-                                <span> Sports: {portfolio.sports.map((sport) => <Tag>{(sport as Sport).name? (sport as Sport).name: sport}</Tag>)}</span>
+                                <span> Sports: {portfolio.sports.map((sport) => <Tag>{(sport as Sport).name ?? sport.toString}</Tag>)}</span>
                             }</p>
                             <p>{portfolio.teams.length>0 &&
                                <span> Teams: {portfolio.teams.map((team) => <Tag>{(team as Team).name? (team as Team).name: team.toString()}</Tag>)}</span>

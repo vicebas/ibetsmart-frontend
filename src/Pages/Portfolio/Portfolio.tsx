@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {Portfolio as PortfolioType} from "../../interfaces/";
+import {Geolocation, Portfolio as PortfolioType, Team} from "../../interfaces/";
 import {Game as GameType, Sport as SportType, Competition as CompetitionType} from "../../interfaces/";
 import api from "../../Api";
 import {useParams} from "react-router-dom";
@@ -14,10 +14,10 @@ const GameCard = ({game}: { game: GameType }) => {
     const sport = (game.sport as SportType).name ? (game.sport as SportType).name : game.sport;
     const team1 = game.team_1.name;
     const team2 = game.team_2.name;
-    const competition = (game.competition as CompetitionType).name ? game.competition.name : game.competition;
-    const geolocation = (game.geolocation as CompetitionType).name ? game.geolocation.name : game.geolocation;
+    const competition = (game.competition as CompetitionType).name ? (game.competition as CompetitionType).name  : game.competition;
+    const geolocation = (game.geolocation as Geolocation).name ? (game.geolocation as Geolocation).name : game.geolocation;
     const body = `${team1} x ${team2}`;
-    const game_statistics = game.game_statistics[0]
+    const game_statistics = game.game_statistics?.pop()
     return <><Card title={`${sport}: ${competition}`}>
         <Meta title={body} description={`${geolocation} - ${moment(game.date).format('MMMM Do YYYY, h:mm:ss a')}`}/>
         <Divider/>
@@ -27,7 +27,7 @@ const GameCard = ({game}: { game: GameType }) => {
 
                 {game_statistics && <Statistic
                     title={game_statistics["bet_reccomendation"] > 0 ? `Bet Reccomendation: ${team1}` : `Bet Reccomendation: ${team2}`}
-                    value={parseFloat(game_statistics["pcm_game"]) * 100}
+                    value={game_statistics["pcm_game"] * 100}
                     precision={2}
                     valueStyle={{color: '#3f8600'}}
                     suffix="%"
@@ -38,7 +38,7 @@ const GameCard = ({game}: { game: GameType }) => {
 
                 {game_statistics && <Statistic
                     title={game_statistics["bet_reccomendation"] > 0 ? `Bet Reccomendation: ${team1}` : `Bet Reccomendation: ${team2}`}
-                    value={parseFloat(game_statistics["pcm_game"]) * 100}
+                    value={game_statistics["pcm_game"] * 100}
                     precision={2}
                     valueStyle={{color: '#3f8600'}}
                     suffix="%"
@@ -57,10 +57,13 @@ const Portfolio = () => {
     const [games, setGames] = useState<GameType[]>([]);
 
     const getPortfolio = useCallback(async () => {
+        if(!id) return;
         const data = (await api.getPortfolio(id)).data as PortfolioType;
         setPortfolio(data);
     }, [id])
     const getPortfolioGames = useCallback(async () => {
+        if(!id) return;
+
         const data = (await api.getPortfolioGames(id)).data as GameType[];
         setGames(data);
     },[id])
@@ -86,7 +89,7 @@ const Portfolio = () => {
                 </h3>
             )}
             {!!portfolio?.teams.length && (
-                <h3>Teams: <Tag>{portfolio?.teams.map(team => (team as SportType).name ? (team as SportType).name : team).join(", ")}</Tag>
+                <h3>Teams: <Tag>{portfolio?.teams.map(team => (team as Team).name ? (team as Team).name : team).join(", ")}</Tag>
                 </h3>
             )}
             {!!portfolio?.competitions.length && (

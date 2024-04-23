@@ -1,4 +1,4 @@
-import {id, primitive} from "./generic.interface.ts";
+import {id} from "./generic.interface.ts";
 import {Bookmarker} from "./Bookmarker.interface.ts";
 
 type Sport = {
@@ -34,7 +34,40 @@ type Team = {
     sport: Sport;
 };
 
-type GameStatistics = {[key:string] : primitive };
+type GameStatistics = {
+    game: number;
+    number_of_bookmarkers: number;
+
+    // odds team 1
+    odds_highest_team_1: number;
+    odds_mean_team_1: number;
+    odds_median_team_1: number;
+    odds_std_away_team_1: number;
+    odds_se_team_1: number;
+    odds_norm_se_team_1: number;
+    implied_probability_simple_team_1: number;
+
+    // odds team 2
+    odds_highest_team_2: number;
+    odds_mean_team_2: number;
+    odds_median_team_2: number;
+    odds_std_away_team_2: number;
+    odds_se_team_2: number;
+    odds_norm_se_team_2: number;
+    implied_probability_simple_team_2: number;
+
+    implied_probabilities_summed: number;
+
+    implied_probability_totaliser_basis_team_1: number;
+    implied_probability_totaliser_basis_team_2: number;
+
+    // Prediction Confidence Margin
+    pcm_home: number;
+    pcm_away: number;
+    pcm_game: number;
+    nce_game: number;
+    bet_reccomendation: number;
+}
 
 type Game = {
     id: id;
