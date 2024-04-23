@@ -2,7 +2,7 @@ import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {LoginData, SignupData} from "../interfaces/User.interface.ts";
 import {Portfolio} from "../interfaces";
 
-const BASE_URL =  import.meta.env.VITE_BASE_URL ?? 'https://backendibet.gamaliel.dev/api';
+const BASE_URL =  import.meta.env.VITE_BASE_URL ?? 'http://backendibet.gamaliel.dev/api';
 //const BASE_URL = 'https://backendibet.gamaliel.dev/api';
 
 console.log(BASE_URL);
