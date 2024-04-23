@@ -4,12 +4,10 @@ import {Game as GameType, Sport as SportType, Competition as CompetitionType} fr
 import api from "../../Api";
 import {useParams, Link} from "react-router-dom";
 import Loading from "../../Components/Loading.tsx";
-import Meta from "antd/es/card/Meta";
-import {Button, Card, Col, Divider, List, Row, Statistic} from "antd";
+import {Button, List} from "antd";
 import {Tag} from "antd";
 
 import moment from 'moment';
-import {m} from "framer-motion";
 
 const GameCard = ({game}: { game: GameType }) => {
     const sport = (game.sport as SportType).name ? (game.sport as SportType).name : game.sport;
@@ -21,7 +19,7 @@ const GameCard = ({game}: { game: GameType }) => {
     return (<List.Item>
             <List.Item.Meta
                 title={
-                    <Link to={`/game/${game.id}`}>{body} - {`${sport}: ${competition}`}</Link>}
+                    <Link to={`/game/${game.id}`}>{body} - {`${sport}: ${competition}`} - {geolocation.toString()}</Link>}
                 description={moment(game.date).format('MMMM Do YYYY, h:mm:ss a')}
             />
         </List.Item>)
@@ -88,7 +86,7 @@ const Portfolio = () => {
             <h2>Games</h2>
             <List gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
                 {games.map((game, key) => (
-                        <GameCard game={game}/>
+                        <GameCard key={key} game={game}/>
                 ))}
             </List>
         </div>

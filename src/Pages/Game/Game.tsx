@@ -13,7 +13,6 @@ const Game = () => {
     const {id} = useParams();
     const [game, setGame] = useState<GameType | null>(null);
     const [loading, setLoading] = useState(true);
-    const [bookmarked, setBookmarked] = useState(false);
 
     const getGame = useCallback(async () => {
         if(!id) return;
@@ -23,7 +22,7 @@ const Game = () => {
 
     useEffect(() => {
         getGame().then(() => setLoading(false));
-    }, []);
+    });
     if (loading)
         return (
             <Flex vertical>

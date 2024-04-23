@@ -10,9 +10,7 @@ import {
 import Loading from "../../Components/Loading.tsx";
 import {
   Card,
-  Col,
   Tag,
-  Row,
   List,
   Divider,
   Flex,
@@ -20,7 +18,6 @@ import {
   Checkbox,
   CheckboxProps,
 } from "antd";
-import { Link } from "react-router-dom";
 import { BookFilled, CheckCircleTwoTone } from "@ant-design/icons";
 
 const { Title } = Typography;
@@ -32,7 +29,7 @@ const PortfolioItem = ({ portfolio }: { portfolio: Portfolio }) => {
 
   if (!portfolio || !portfolio.id) return null;
 
-  const onChange: CheckboxProps["onChange"] = (e) => {
+  const onChange: CheckboxProps["onChange"] = () => {
     if (!portfolio || !portfolio.id) return;
     setLoading(true);
     api.subscribePortfolio(portfolio.id.toString()).then(() => {

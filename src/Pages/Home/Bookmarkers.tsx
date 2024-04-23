@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Bookmarker as BookmarkerType } from '../../interfaces';
 import api from '../../Api';
-import {Col, Row, Switch, Flex, List, Card} from "antd";
+import {Switch, Flex, List, Card} from "antd";
 import Loading from "../../Components/Loading.tsx";
 import { Typography } from 'antd';
 const { Title } = Typography;

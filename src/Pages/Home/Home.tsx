@@ -1,11 +1,8 @@
-import { Card, Col, Divider, Flex, List, Row, Statistic } from 'antd';
+import { Card, Col, Divider, Flex, Row, Statistic } from 'antd';
 import { Portfolio as PortfolioType, GameWithoutIds as  GameType,} from '../../interfaces';
-import React, { useCallback, useEffect, useState } from 'react';
-import api from '../../Api';
+import React, { useEffect, useState } from 'react';
 import Title from 'antd/es/typography/Title';
-import moment from 'moment';
 import { PortfolioContext } from '../../context/PortfolioContext';
-import exp from 'constants';
 import { Link } from 'react-router-dom';
 type PortfolioCardProps = {
     portfolio: PortfolioType,
@@ -43,7 +40,7 @@ const Home = () => {
         await Promise.all(data.map(async (portfolio) => {
             if(portfolio.id){
                 const games = await getGames(portfolio.id.toString());
-                //@ts-expect-error
+                //@ts-expect-error i dont know what is happening here
                 setGames({...games, [portfolio.id.toString()]: games});
             }
         }))
