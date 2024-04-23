@@ -84,7 +84,7 @@ const Portfolio = () => {
                 </h3>
             )}
             <h2>Games</h2>
-            <List gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+            <List >
                 {games.map((game, key) => (
                         <GameCard key={key} game={game}/>
                 ))}

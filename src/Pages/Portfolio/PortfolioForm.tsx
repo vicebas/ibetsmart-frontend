@@ -48,6 +48,7 @@ const PortfolioForm = () => {
 
     const onFinish: FormProps<PortfolioType>['onFinish'] = (values) => {
         const portfolio:PortfolioType = {
+            id: "",
             sports: values.sports || [],
             teams: values.teams || [],
             competitions: values.competitions || [],
